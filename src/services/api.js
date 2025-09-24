@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://library-management-backend-lqqv.onrender.com/api";
 
 class ApiService {
   constructor() {
