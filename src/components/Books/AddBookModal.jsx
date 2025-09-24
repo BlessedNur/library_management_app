@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { FiX, FiUpload, FiImage } from "react-icons/fi";
+import { FiX, FiUpload, FiImage, FiRefreshCw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "../../config/cloudinary";
+import { generateRandomISBN, formatISBN } from "../../lib/isbnGenerator";
 
 const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
     description: "",
     totalCopies: 1,
     coverImage: "",
+    isbn: "",
   });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -43,7 +45,13 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
     setLoading(true);
 
     try {
-      await onSubmit(formData);
+      // Auto-generate ISBN if not already set
+      const dataToSubmit = {
+        ...formData,
+        isbn: formData.isbn || generateRandomISBN(),
+      };
+
+      await onSubmit(dataToSubmit);
       setFormData({
         title: "",
         author: "",
@@ -51,6 +59,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
         description: "",
         totalCopies: 1,
         coverImage: "",
+        isbn: "",
       });
       onClose();
     } catch (error) {
