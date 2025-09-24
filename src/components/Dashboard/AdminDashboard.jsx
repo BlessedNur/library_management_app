@@ -45,6 +45,8 @@ const AdminDashboard = ({ user }) => {
   const [showEditBookModal, setShowEditBookModal] = useState(false);
   const [showDeleteBookModal, setShowDeleteBookModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [bookLoading, setBookLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Load data on component mount
   useEffect(() => {
@@ -75,23 +77,38 @@ const AdminDashboard = ({ user }) => {
   // Admin action handlers
   const handleCreateBook = async (bookData) => {
     try {
+      setBookLoading(true);
       await apiService.createBook(bookData);
       await loadData();
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error creating book:", error);
+    } finally {
+      setBookLoading(false);
+    }
   };
 
   const handleUpdateBook = async (bookId, bookData) => {
     try {
+      setBookLoading(true);
       await apiService.updateBook(bookId, bookData);
       await loadData();
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error updating book:", error);
+    } finally {
+      setBookLoading(false);
+    }
   };
 
   const handleDeleteBook = async (bookId) => {
     try {
+      setDeleteLoading(true);
       await apiService.deleteBook(bookId);
       await loadData();
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   const handleCreateFine = async (fineData) => {
@@ -197,7 +214,7 @@ const AdminDashboard = ({ user }) => {
         <div className="space-y-4">
           {loans.slice(0, 5).map((loan) => (
             <div
-              key={loan.id}
+              key={loan._id}
               className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
             >
               <div className="flex-1">
@@ -259,10 +276,20 @@ const AdminDashboard = ({ user }) => {
           </h2>
           <Button
             onClick={() => setShowAddBookModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            disabled={bookLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FiPlus className="mr-2" />
-            Add New Book
+            {bookLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Adding...
+              </div>
+            ) : (
+              <>
+                <FiPlus className="mr-2" />
+                Add New Book
+              </>
+            )}
           </Button>
         </div>
 
@@ -336,17 +363,28 @@ const AdminDashboard = ({ user }) => {
                         <Button
                           size="sm"
                           variant="outline"
+                          disabled={bookLoading}
                           onClick={() => handleEditBook(book)}
+                          className="disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <FiEdit className="h-4 w-4" />
+                          {bookLoading ? (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+                          ) : (
+                            <FiEdit className="h-4 w-4" />
+                          )}
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-red-600"
+                          className="text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                          disabled={deleteLoading}
                           onClick={() => handleDeleteBookClick(book)}
                         >
-                          <FiTrash2 className="h-4 w-4" />
+                          {deleteLoading ? (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                          ) : (
+                            <FiTrash2 className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -698,7 +736,7 @@ const AdminDashboard = ({ user }) => {
         onClose={() => setShowDeleteBookModal(false)}
         onConfirm={handleDeleteBookConfirm}
         book={selectedBook}
-        loading={false}
+        loading={deleteLoading}
       />
     </div>
   );

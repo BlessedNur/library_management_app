@@ -15,6 +15,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
     coverImage: "",
   });
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -63,6 +64,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setUploading(true);
     try {
       toast.loading("Uploading image...", { id: "upload" });
 
@@ -76,6 +78,8 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
         id: "upload",
       });
       console.error("Upload error:", error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -141,10 +145,23 @@ const AddBookModal = ({ isOpen, onClose, onSubmit }) => {
                     />
                     <label
                       htmlFor="cover-upload"
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+                      className={`inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium transition-all duration-200 ${
+                        uploading
+                          ? "text-blue-600 bg-blue-50 border-blue-300 cursor-not-allowed"
+                          : "text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+                      }`}
                     >
-                      <FiUpload className="h-4 w-4 mr-2" />
-                      Upload Cover
+                      {uploading ? (
+                        <div className="flex items-center">
+                          <div className="animate-pulse w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+                          <span>Uploading...</span>
+                        </div>
+                      ) : (
+                        <>
+                          <FiUpload className="h-4 w-4 mr-2" />
+                          Upload Cover
+                        </>
+                      )}
                     </label>
                   </div>
                 </div>
