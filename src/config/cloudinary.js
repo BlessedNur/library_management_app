@@ -1,8 +1,8 @@
 // Cloudinary configuration for client-side uploads
 export const cloudinaryConfig = {
-  cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || "dwoaukreo",
-  uploadPreset: "lfg3xanz",
-  apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY || "378833648339572",
+  cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+  uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
+  apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY,
 };
 
 // Upload single image to Cloudinary (client-side)
