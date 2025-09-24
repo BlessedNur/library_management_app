@@ -218,9 +218,11 @@ const AdminDashboard = ({ user }) => {
               className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
             >
               <div className="flex-1">
-                <h4 className="font-medium text-gray-900">{loan.book.title}</h4>
+                <h4 className="font-medium text-gray-900">
+                  {loan.book?.title || "Unknown Book"}
+                </h4>
                 <p className="text-sm text-gray-600">
-                  Borrowed by {loan.user.name}
+                  Borrowed by {loan.user?.name || "Unknown User"}
                 </p>
                 <p className="text-xs text-gray-500">
                   Due: {formatDate(loan.dueDate)}
@@ -432,20 +434,20 @@ const AdminDashboard = ({ user }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
-                        {loan.user.name}
+                        {loan.user?.name || "Unknown User"}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {loan.user.email}
+                        {loan.user?.email || "No email"}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
-                        {loan.book.title}
+                        {loan.book?.title || "Unknown Book"}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {loan.book.author}
+                        {loan.book?.author || "Unknown Author"}
                       </div>
                     </div>
                   </td>
@@ -595,10 +597,10 @@ const AdminDashboard = ({ user }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
-                        {fine.user.name}
+                        {fine.user?.name || "Unknown User"}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {fine.user.email}
+                        {fine.user?.email || "No email"}
                       </div>
                     </div>
                   </td>
