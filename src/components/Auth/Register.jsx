@@ -53,7 +53,6 @@ const Register = ({ onLogin }) => {
       onLogin(response.user);
       navigate("/dashboard");
     } catch (err) {
-      // Error toast is already shown by API service
       setError("Registration failed");
     } finally {
       setLoading(false);

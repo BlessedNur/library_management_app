@@ -66,7 +66,6 @@ const AdminDashboard = ({ user }) => {
       setFines(finesData);
       setUsers(usersData);
     } catch (error) {
-      // Error toast is already shown by API service
       setError("Failed to load data");
     } finally {
       setLoading(false);
@@ -78,45 +77,28 @@ const AdminDashboard = ({ user }) => {
     try {
       await apiService.createBook(bookData);
       await loadData();
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   const handleUpdateBook = async (bookId, bookData) => {
     try {
       await apiService.updateBook(bookId, bookData);
       await loadData();
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   const handleDeleteBook = async (bookId) => {
     try {
       await apiService.deleteBook(bookId);
       await loadData();
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
-  };
-
-  const handleReturnLoan = async (loanId) => {
-    try {
-      await apiService.returnBook(loanId);
-      await loadData();
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   const handleCreateFine = async (fineData) => {
     try {
       await apiService.createFine(fineData);
       await loadData();
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   // Modal handlers
@@ -140,15 +122,6 @@ const AdminDashboard = ({ user }) => {
     await handleDeleteBook(selectedBook._id);
     setShowDeleteBookModal(false);
     setSelectedBook(null);
-  };
-
-  const handlePayFine = async (fineId) => {
-    try {
-      await apiService.payFine(fineId);
-      await loadData(); // Refresh data after paying fine
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
   };
 
   const sidebarItems = [
@@ -413,14 +386,11 @@ const AdminDashboard = ({ user }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loans.map((loan) => (
-                <tr key={loan.id}>
+                <tr key={loan._id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
@@ -442,7 +412,7 @@ const AdminDashboard = ({ user }) => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {formatDate(loan.borrowedDate)}
+                    {formatDate(loan.dueDate)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -465,11 +435,6 @@ const AdminDashboard = ({ user }) => {
                     >
                       {loan.status}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Button size="sm" variant="outline">
-                      Process Return
-                    </Button>
                   </td>
                 </tr>
               ))}
@@ -579,19 +544,16 @@ const AdminDashboard = ({ user }) => {
                   Reason
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Due Date
+                  Date Created
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {fines.map((fine) => (
-                <tr key={fine.id}>
+                <tr key={fine._id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
@@ -621,20 +583,6 @@ const AdminDashboard = ({ user }) => {
                     >
                       {fine.status}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    {fine.status === "pending" ? (
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handlePayFine(fine._id)}
-                        className="text-green-600 hover:text-green-700"
-                      >
-                        Pay Fine
-                      </Button>
-                    ) : (
-                      <span className="text-gray-400 text-sm">Paid</span>
-                    )}
                   </td>
                 </tr>
               ))}

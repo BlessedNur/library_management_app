@@ -39,7 +39,6 @@ const Login = ({ onLogin }) => {
         navigate("/dashboard");
       }
     } catch (err) {
-      // Error toast is already shown by API service
       setError("Login failed");
     } finally {
       setLoading(false);

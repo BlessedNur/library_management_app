@@ -51,7 +51,6 @@ const UserDashboard = ({ user }) => {
       setReservations(reservationsData);
       setFines(finesData);
     } catch (error) {
-      // Error toast is already shown by API service
       setError("Failed to load data");
     } finally {
       setLoading(false);
@@ -78,9 +77,7 @@ const UserDashboard = ({ user }) => {
     try {
       await apiService.returnBook(loanId);
       await loadData(); // Reload data
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   const handleRenew = (loanId) => {
@@ -92,9 +89,7 @@ const UserDashboard = ({ user }) => {
     try {
       await apiService.cancelReservation(reservationId);
       await loadData(); // Reload data
-    } catch (error) {
-      // Error toast is already shown by API service
-    }
+    } catch (error) {}
   };
 
   const sidebarItems = [
