@@ -20,11 +20,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is logged in on app start
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Clear any old token first
         localStorage.removeItem("token");
 
         const token = localStorage.getItem("librarytoken");
@@ -33,7 +31,6 @@ function App() {
           setUser(userData.user);
         }
       } catch (error) {
-        // Token is invalid, clear it
         apiService.clearToken();
       } finally {
         setLoading(false);
@@ -52,7 +49,6 @@ function App() {
     apiService.clearToken();
   };
 
-  // Protected Route Component
   const ProtectedRoute = ({ children, requireAdmin = false }) => {
     if (loading) {
       return (

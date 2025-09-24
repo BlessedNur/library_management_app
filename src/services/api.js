@@ -36,10 +36,6 @@ class ApiService {
       ...options,
     };
 
-    // Debug: Log token for loan requests
-    if (endpoint.includes("/loans") && this.token) {
-      console.log("Token being sent:", this.token);
-    }
 
     try {
       const response = await fetch(url, config);
