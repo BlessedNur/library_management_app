@@ -1,9 +1,11 @@
+// Cloudinary configuration for client-side uploads
 export const cloudinaryConfig = {
-  cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
-  apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY,
+  cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || "dwoaukreo",
+  uploadPreset: "lfg3xanz",
+  apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY || "378833648339572",
 };
 
+// Upload single image to Cloudinary (client-side)
 export const uploadSingleImage = async (file, folder = "library/books") => {
   const formData = new FormData();
   formData.append("file", file);
@@ -13,6 +15,7 @@ export const uploadSingleImage = async (file, folder = "library/books") => {
 
   try {
     const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
       {
         method: "POST",
         body: formData,
@@ -31,20 +34,25 @@ export const uploadSingleImage = async (file, folder = "library/books") => {
   }
 };
 
+// Upload multiple images to Cloudinary (client-side)
 export const uploadMultipleImages = async (files, folder = "library/books") => {
   const uploadPromises = files.map((file) => uploadSingleImage(file, folder));
   return Promise.all(uploadPromises);
 };
 
+// Legacy function for backward compatibility
 export const uploadImageToCloudinary = async (file) => {
   const result = await uploadSingleImage(file);
   return result.secure_url;
 };
 
+// Helper function to delete images (requires server-side implementation)
 export const deleteImages = async (publicIds) => {
   if (publicIds.length === 0) return;
 
   try {
+    // Note: This requires server-side implementation as client-side deletion
+    // requires API secret which should never be exposed to the frontend
     console.warn(
       "Image deletion should be implemented server-side for security"
     );
