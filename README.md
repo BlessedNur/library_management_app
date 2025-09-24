@@ -1,3 +1,4 @@
+applink=https://librarymanagementappnurblessed.vercel.app
 
 ## Admin Credentials
 
